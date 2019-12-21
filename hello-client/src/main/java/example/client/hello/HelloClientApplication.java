@@ -64,6 +64,7 @@ public class HelloClientApplication {
         private void updateMessageFormat(String messageFormat) {
             LOG.info("Pushing new hello message format via METADATA_PUSH: {}", messageFormat);
 
+            // Create composite metadata to send
             CompositeByteBuf metadataByteBuf = ByteBufAllocator.DEFAULT.compositeBuffer();
             CompositeMetadataFlyweight.encodeAndAddMetadata(
                     metadataByteBuf,
@@ -71,6 +72,7 @@ public class HelloClientApplication {
                     "messaging/x.hello.messageformat",
                     ByteBufAllocator.DEFAULT.buffer().writeBytes(messageFormat.getBytes()));
 
+            // Send the composite metadata
             rSocketRequester.rsocket()
                     .metadataPush(ByteBufPayload.create(Unpooled.EMPTY_BUFFER, metadataByteBuf))
                     .block();
