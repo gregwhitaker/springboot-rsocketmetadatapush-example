@@ -36,7 +36,6 @@ public class HelloController {
      * Handles METADATA_PUSH frames to update the message format.
      *
      * @param metadata metadata
-     * @return
      */
     @ConnectMapping
     public Mono<Void> metadataUpdate(@Headers Map<String, Object> metadata) {
@@ -49,7 +48,7 @@ public class HelloController {
      *
      * @param name name to add in the response message
      * @param metadata request metadata
-     * @return
+     * @return hello message
      */
     @MessageMapping("hello")
     public Mono<String> hello(String name, @Headers Map<String, Object> metadata) {
