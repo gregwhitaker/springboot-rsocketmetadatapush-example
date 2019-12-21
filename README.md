@@ -17,8 +17,20 @@ Follow the steps below to run the example:
 
         ./gradlew :hello-client:bootRun --args="Bob"
         
+    If successful, you will see the following in the terminal:
 
+        : Started HelloClientApplication in 0.967 seconds (JVM running for 1.336)
+        : Sending hello request 1...
+        : Response: Hello, Bob! [clientId: 'greg_demo_client']
+        : Pushing new hello message format via METADATA_PUSH: Bonjour, %s!
+        : Sending hello request 2...
+        : Response: Bonjour, Bob! [clientId: 'greg_demo_client']
+        
+    Notice that the first hello message uses the format `Hello, {name}!`. The message format is then updated to `Bonjour, {name}!' 
+    via RSocket metadata push and a new request is sent through to show that the message has been updated.
 
+    Also, notice that the `clientId` metadata in both scenarios remains as it was set during the RSocket connection setup.
+    
 ## Bugs and Feedback
 For bugs, questions, and discussions please use the [Github Issues](https://github.com/gregwhitaker/springboot-rsocketmetadatapush-example/issues).
 
