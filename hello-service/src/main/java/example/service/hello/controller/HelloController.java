@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.rsocket.annotation.ConnectMapping;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Mono;
@@ -21,17 +22,27 @@ public class HelloController {
     private volatile String messageFormat;
 
     /**
-     * Sets the response message format on SETUP or METADATA_PUSH.
+     * Handles the SETUP frame on initial connection.
      *
-     * @param newMessageFormat message format
      * @param metadata setup metadata
      */
-    @ConnectMapping("hello.setMessage")
-    public void setMessage(String newMessageFormat, @Headers Map<String, Object> metadata) {
-        LOG.info("Received new message format via METADATA_PUSH: {}", newMessageFormat);
+    @ConnectMapping("hello.setup")
+    public Mono<Void> setup(@Headers Map<String, Object> metadata) {
+        this.messageFormat = metadata.get("messageFormat").toString();
+        this.clientId = metadata.get("clientId").toString();
+        return Mono.empty();
+    }
 
-        this.messageFormat = newMessageFormat;                  // setup payload
-        this.clientId = metadata.get("clientId").toString();    // setup metadata
+    /**
+     * Handles METADATA_PUSH frames to update the message format.
+     *
+     * @param metadata metadata
+     * @return
+     */
+    @ConnectMapping
+    public Mono<Void> metadataUpdate(@Headers Map<String, Object> metadata) {
+        this.messageFormat = metadata.get("messageFormat").toString();
+        return Mono.empty();
     }
 
     /**

@@ -1,5 +1,10 @@
 package example.client.hello;
 
+import io.netty.buffer.ByteBufAllocator;
+import io.netty.buffer.CompositeByteBuf;
+import io.netty.buffer.Unpooled;
+import io.rsocket.metadata.CompositeMetadataFlyweight;
+import io.rsocket.util.ByteBufPayload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +33,47 @@ public class HelloClientApplication {
 
         @Override
         public void run(String... args) throws Exception {
-            LOG.info("Sending hello request...");
+            LOG.info("Sending hello request 1...");
 
-            String message = rSocketRequester.route("hello")
+            // Sending initial hello request
+            String helloResponse1 = rSocketRequester.route("hello")
                     .data("Bob")
                     .retrieveMono(String.class)
                     .block();
 
-            LOG.info("Response: {}", message);
+            LOG.info("Response: {}", helloResponse1);
+
+            updateMessageFormat("Bonjour, %s!");
+
+            LOG.info("Sending hello request 2...");
+
+            // Sending initial hello request
+            String helloResponse2 = rSocketRequester.route("hello")
+                    .data("Bob")
+                    .retrieveMono(String.class)
+                    .block();
+
+            LOG.info("Response: {}", helloResponse2);
+        }
+
+        /**
+         * Sends a metadata push to update the message format.
+         *
+         * @param messageFormat new message format
+         */
+        private void updateMessageFormat(String messageFormat) {
+            LOG.info("Pushing new hello message format via METADATA_PUSH: {}", messageFormat);
+
+            CompositeByteBuf metadataByteBuf = ByteBufAllocator.DEFAULT.compositeBuffer();
+            CompositeMetadataFlyweight.encodeAndAddMetadata(
+                    metadataByteBuf,
+                    ByteBufAllocator.DEFAULT,
+                    "messaging/x.hello.messageformat",
+                    ByteBufAllocator.DEFAULT.buffer().writeBytes(messageFormat.getBytes()));
+
+            rSocketRequester.rsocket()
+                    .metadataPush(ByteBufPayload.create(Unpooled.EMPTY_BUFFER, metadataByteBuf))
+                    .block();
         }
     }
 }
