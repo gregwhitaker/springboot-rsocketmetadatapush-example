@@ -26,7 +26,7 @@ Follow the steps below to run the example:
         : Sending hello request 2...
         : Response: Bonjour, Bob! [clientId: 'greg_demo_client']
         
-    Notice that the first hello message uses the format `Hello, {name}!`. The message format is then updated to `Bonjour, {name}!' 
+    Notice that the first hello message uses the format `Hello, {name}!`. The message format is then updated to `Bonjour, {name}!` 
     via RSocket metadata push and a new request is sent through to show that the message has been updated.
 
     Also, notice that the `clientId` metadata in both scenarios remains as it was set during the RSocket connection setup.
