@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.util.MimeTypeUtils;
 
-import java.util.UUID;
-
 @Configuration
 public class RSocketConfiguration {
 
@@ -23,7 +21,8 @@ public class RSocketConfiguration {
     @Bean
     public RSocketRequester rsocketRequester() {
         return RSocketRequester.builder()
-                .setupRoute("hello.setup")
+                .setupRoute("hello.setMessage")
+                .setupData("Hello, %s!")
                 .setupMetadata(clientId, MimeTypeUtils.TEXT_PLAIN)
                 .dataMimeType(MimeTypeUtils.TEXT_PLAIN)
                 .connectTcp(helloServiceHostname, helloServicePort)
