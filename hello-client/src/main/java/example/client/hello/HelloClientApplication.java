@@ -14,6 +14,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Component;
 
+import static picocli.CommandLine.Parameters;
+import static picocli.CommandLine.populateCommand;
+
 @SpringBootApplication
 public class HelloClientApplication {
     private static final Logger LOG = LoggerFactory.getLogger(HelloClientApplication.class);
@@ -33,11 +36,13 @@ public class HelloClientApplication {
 
         @Override
         public void run(String... args) throws Exception {
+            ClientArguments params = populateCommand(new ClientArguments(), args);
+
             LOG.info("Sending hello request 1...");
 
             // Sending initial hello request
             String helloResponse1 = rSocketRequester.route("hello")
-                    .data("Bob")
+                    .data(params.name)
                     .retrieveMono(String.class)
                     .block();
 
@@ -49,7 +54,7 @@ public class HelloClientApplication {
 
             // Sending initial hello request
             String helloResponse2 = rSocketRequester.route("hello")
-                    .data("Bob")
+                    .data(params.name)
                     .retrieveMono(String.class)
                     .block();
 
@@ -77,5 +82,17 @@ public class HelloClientApplication {
                     .metadataPush(ByteBufPayload.create(Unpooled.EMPTY_BUFFER, metadataByteBuf))
                     .block();
         }
+    }
+
+    /**
+     * Hello client command line arguments.
+     */
+    public static class ClientArguments {
+
+        /**
+         * "name" argument to send to the method
+         */
+        @Parameters(index = "0", arity = "1", defaultValue = "name argument for method")
+        public String name;
     }
 }
