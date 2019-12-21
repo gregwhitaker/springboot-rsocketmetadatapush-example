@@ -1,0 +1,4 @@
+rootProject.name = 'springboot-rsocketmetadatapush-example'
+include 'hello-client'
+include 'hello-service'
+
