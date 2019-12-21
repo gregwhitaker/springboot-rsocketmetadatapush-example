@@ -1,5 +1,5 @@
 # springboot-rsocketmetadatapush-example
-An example of using Metadata Push with RSocket and Spring Boot.
+An example of using Metadata Push with [RSocket](http://rsocket.io) and Spring Boot.
 
 ## Building the Example
 Run the following command to build the example:
@@ -16,6 +16,8 @@ Follow the steps below to run the example:
 2. In a new terminal, run the following command to start the `hello-client`:
 
         ./gradlew :hello-client:bootRun --args="Bob"
+        
+
 
 ## Bugs and Feedback
 For bugs, questions, and discussions please use the [Github Issues](https://github.com/gregwhitaker/springboot-rsocketmetadatapush-example/issues).
