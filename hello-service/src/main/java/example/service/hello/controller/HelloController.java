@@ -12,7 +12,8 @@ public class HelloController {
 
     @MessageMapping("hello.setup")
     public Mono<?> setup() {
-        return null;
+        LOG.info("Received Setup Request");
+        return Mono.empty();
     }
 
     @MessageMapping("hello")
