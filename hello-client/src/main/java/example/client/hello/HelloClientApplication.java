@@ -92,7 +92,7 @@ public class HelloClientApplication {
         /**
          * "name" argument to send to the method
          */
-        @Parameters(index = "0", arity = "1", defaultValue = "name argument for method")
+        @Parameters(index = "0", arity = "1", description = "name argument for method")
         public String name;
     }
 }
