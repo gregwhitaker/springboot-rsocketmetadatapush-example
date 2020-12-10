@@ -1,4 +1,6 @@
 # springboot-rsocketmetadatapush-example
+![Build](https://github.com/gregwhitaker/springboot-rsocketmetadatapush-example/workflows/Build/badge.svg)
+
 An example of using Metadata Push with [RSocket](http://rsocket.io) and Spring Boot.
 
 This example consists of an RSocket service, `hello-service`, that returns hello messages in the format specified during connection
